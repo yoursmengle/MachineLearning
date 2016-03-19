@@ -35,23 +35,23 @@ label = np_utils.to_categorical(label, nb_class)
 #14layer, one "add" represent one layer
 def create_model():
 	model = Sequential()
-	model.add(Convolution2D(4, 1, 5, 5, border_mode='valid')) 
+	model.add(Convolution2D(4, 5, 5, border_mode='valid',input_shape=data.shape[-3:])) 
 	model.add(Activation('relu'))
 
-	model.add(Convolution2D(8,4, 3, 3, border_mode='valid'))
+	model.add(Convolution2D(8, 3, 3, border_mode='valid'))
 	model.add(Activation('relu'))
-	model.add(MaxPooling2D(poolsize=(2, 2)))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
 
-	model.add(Convolution2D(16, 8, 3, 3, border_mode='valid')) 
+	model.add(Convolution2D(16,  3, 3, border_mode='valid')) 
 	model.add(Activation('relu'))
-	model.add(MaxPooling2D(poolsize=(2, 2)))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
 
 	model.add(Flatten())
-	model.add(Dense(16*4*4, 128, init='normal'))
+	model.add(Dense( 128, init='normal'))
 	model.add(Activation('relu'))
 	model.add(Dropout(0.2))
 
-	model.add(Dense(128, nb_class, init='normal'))
+	model.add(Dense(10, init='normal'))
 	model.add(Activation('softmax'))
 	return model
 
@@ -83,7 +83,7 @@ for e in range(nb_epoch):
     batch_num = len(Y_train)/batch_size
     progbar = generic_utils.Progbar(X_train.shape[0])
     for i in range(batch_num):
-        loss,accuracy = model.train(X_train[i*batch_size:(i+1)*batch_size], Y_train[i*batch_size:(i+1)*batch_size],accuracy=True)
+        loss,accuracy = model.train_on_batch(X_train[i*batch_size:(i+1)*batch_size], Y_train[i*batch_size:(i+1)*batch_size],accuracy=True)
         progbar.add(batch_size, values=[("train loss", loss),("train accuracy:", accuracy)] )
 
     #save the model of best val-accuracy

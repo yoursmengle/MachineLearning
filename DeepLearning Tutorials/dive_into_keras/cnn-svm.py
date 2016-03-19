@@ -42,8 +42,8 @@ if __name__ == "__main__":
     data = data[index]
     label = label[index]
     
-    (traindata,testdata) = (data[0:30000],data[30000:])
-    (trainlabel,testlabel) = (label[0:30000],label[30000:])
+    (traindata,testdata) = (data[0:40000],data[40000:])
+    (trainlabel,testlabel) = (label[0:40000],label[40000:])
     #use origin_model to predict testdata
     origin_model = cPickle.load(open("model.pkl","rb"))
     pred_testlabel = origin_model.predict_classes(testdata,batch_size=1, verbose=1)
@@ -54,4 +54,4 @@ if __name__ == "__main__":
     get_feature = theano.function([origin_model.layers[0].input],origin_model.layers[11].get_output(train=False),allow_input_downcast=False)
     feature = get_feature(data)
     #train svm using FC-layer feature
-    svc(feature[0:30000],label[0:30000],feature[30000:],label[30000:])
+    svc(feature[0:40000],label[0:40000],feature[40000:],label[40000:])
